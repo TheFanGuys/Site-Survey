@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fan Guys – Site Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f5;
+    --surface: #ffffff;
+    --surface2: #f7f8fa;
+    --border: #d1d9e0;
+    --border2: #b8c4ce;
+    --primary: #1a3a5c;
+    --primary-light: #2563a8;
+    --accent: #e8a020;
+    --accent2: #f5c842;
+    --danger: #c0392b;
+    --danger-light: #fdecea;
+    --success: #1a7a4a;
+    --success-light: #e8f5ee;
+    --warn: #d97706;
+    --warn-light: #fffbeb;
+    --text: #1a2530;
+    --text2: #4a5568;
+    --text3: #7a8a9a;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+    --tab-h: 56px;
+  }
+  .dark {
+    --bg: #0d1520;
+    --surface: #152030;
+    --surface2: #1a2840;
+    --border: #2a3d55;
+    --border2: #3a5070;
+    --primary: #2a6ab0;
+    --primary-light: #4a8fd8;
+    --text: #e8f0f8;
+    --text2: #a0b8cc;
+    --text3: #607080;
+    --danger-light: #2d1010;
+    --success-light: #0f2820;
+    --warn-light: #2a1f00;
+    --shadow: 0 2px 12px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: linear-gradient(135deg, #0f2540 0%, #1a3a5c 60%, #1e4a80 100%);
+    color: #fff;
+    padding: 0 16px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.3);
+    display: flex; align-items: center; gap: 12px;
+    height: 60px;
+  }
+  .app-header .logo-mark {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 18px; color: #0f2540;
+    flex-shrink: 0;
+  }
+  .app-header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(18px, 4vw, 24px);
+    font-weight: 700; letter-spacing: 0.5px;
+    line-height: 1.1;
+  }
+  .app-header h1 span { color: var(--accent2); }
+  .header-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .btn-icon {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; border-radius: 8px;
+    width: 38px; height: 38px;
+    cursor: pointer; font-size: 17px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .btn-icon:hover { background: rgba(255,255,255,0.2); }
+
+  /* ── LAYOUT ── */
+  .app-body { display: flex; min-height: calc(100vh - 60px); }
+  .sidebar {
+    width: 220px; flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+    position: sticky; top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
+    color: var(--text2);
+    border-left: 3px solid transparent;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--primary-light); }
+  .nav-item.active {
+    background: var(--surface2);
+    color: var(--primary-light);
+    border-left-color: var(--accent);
+  }
+  .nav-item .nav-icon { font-size: 18px; width: 22px; text-align: center; }
+  .main { flex: 1; padding: 20px 16px 40px; max-width: 900px; min-width: 0; }
+  @media (min-width: 900px) { .main { padding: 28px 32px 60px; } }
+
+  /* ── MOBILE TABS ── */
+  .mobile-tabs {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    height: var(--tab-h); z-index: 90;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.12);
+  }
+  .mobile-tabs-inner { display: flex; height: 100%; }
+  .mob-tab {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2px; cursor: pointer;
+    font-size: 10px; font-weight: 600;
+    color: var(--text3); letter-spacing: 0.3px;
+    transition: color 0.18s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mob-tab .ti { font-size: 20px; }
+  .mob-tab.active { color: var(--primary-light); }
+  .mob-tab.active .ti { color: var(--accent); }
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .mobile-tabs { display: flex; }
+    .main { padding: 16px 12px 76px; }
+  }
+
+  /* ── SECTION PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.5px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .dark .card-title { color: var(--primary-light); }
+
+  /* ── FORM ELEMENTS ── */
+  .form-grid { display: grid; gap: 14px; }
+  .form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 560px) {
+    .form-grid.cols-2, .form-grid.cols-3 { grid-template-columns: 1fr; }
+  }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-size: 12px; font-weight: 600;
+    color: var(--text2); letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .field input, .field select, .field textarea {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 10px 12px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    transition: border-color 0.18s, box-shadow 0.18s;
+    width: 100%;
+    min-height: 44px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(37,99,168,0.15);
+  }
+  .field textarea { min-height: 80px; resize: vertical; }
+  .field select { cursor: pointer; }
+
+  /* ── RADIO GROUP ── */
+  .radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .radio-option {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer; user-select: none;
+    font-size: 14px; font-weight: 500; color: var(--text2);
+    background: var(--surface2);
+    transition: all 0.18s;
+    min-height: 44px;
+  }
+  .radio-option input[type="radio"] { accent-color: var(--primary-light); width: 16px; height: 16px; }
+  .radio-option.selected {
+    border-color: var(--primary-light);
+    background: rgba(37,99,168,0.08);
+    color: var(--primary-light);
+  }
+
+  /* ── TOGGLE ── */
+  .toggle-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .toggle-btn {
+    padding: 8px 16px; border-radius: 7px; border: 1.5px solid var(--border);
+    background: var(--surface2); color: var(--text2);
+    font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all 0.18s; min-height: 44px;
+  }
+  .toggle-btn.on {
+    border-color: var(--success); background: var(--success-light); color: var(--success);
+  }
+  .toggle-btn.off {
+    border-color: var(--danger); background: var(--danger-light); color: var(--danger);
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 11px 20px; border-radius: 8px;
+    font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s; border: none;
+    min-height: 44px; white-space: nowrap;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-accent { background: var(--accent); color: #0f2540; }
+  .btn-accent:hover { background: var(--accent2); }
+  .btn-outline {
+    background: transparent; border: 1.5px solid var(--border2);
+    color: var(--text2);
+  }
+  .btn-outline:hover { border-color: var(--primary-light); color: var(--primary-light); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:hover { opacity: 0.85; }
+  .btn-sm { padding: 7px 14px; font-size: 13px; min-height: 36px; }
+
+  /* ── FAN CARD ── */
+  .fan-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .fan-card.has-warning { border-color: var(--warn); }
+  .fan-card.has-error { border-color: var(--danger); }
+  .fan-card-header {
+    background: linear-gradient(135deg, #1a3a5c, #1e4a80);
+    color: #fff;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; user-select: none;
+  }
+  .fan-card-header .fan-num {
+    background: var(--accent);
+    color: #0f2540;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 14px; flex-shrink: 0;
+  }
+  .fan-card-header .fan-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px; font-weight: 700; letter-spacing: 0.5px;
+    flex: 1;
+  }
+  .fan-card-body { padding: 20px; display: none; }
+  .fan-card-body.open { display: block; }
+  .fan-section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text3);
+    margin: 18px 0 10px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── ALERTS & WARNINGS ── */
+  .alert {
+    border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; display: flex; align-items: flex-start; gap: 9px;
+    margin-top: 8px;
+  }
+  .alert-warn { background: var(--warn-light); border: 1px solid #fcd34d; color: #92400e; }
+  .dark .alert-warn { color: #fcd34d; }
+  .alert-danger { background: var(--danger-light); border: 1px solid #fca5a5; color: var(--danger); }
+  .alert-success { background: var(--success-light); border: 1px solid #6ee7b7; color: var(--success); }
+  .alert-info { background: rgba(37,99,168,0.08); border: 1px solid rgba(37,99,168,0.3); color: var(--primary-light); }
+  .alert .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── COLLAPSIBLE ── */
+  .collapsible-header {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none; padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: background 0.18s;
+  }
+  .collapsible-header:hover { background: var(--surface2); }
+  .collapsible-header .ch-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .collapsible-body {
+    border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 16px 20px; display: none;
+    background: var(--surface2);
+  }
+  .collapsible-body.open { display: block; }
+  .caret { transition: transform 0.2s; font-size: 12px; }
+  .caret.open { transform: rotate(180deg); }
+
+  /* ── SUMMARY ── */
+  .summary-stat {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .summary-stat:last-child { border-bottom: none; }
+  .summary-stat .stat-label { color: var(--text2); }
+  .summary-stat .stat-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px; font-weight: 700; color: var(--primary-light);
+  }
+  .warn-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--warn-light); border: 1px solid #fcd34d;
+    color: #92400e; border-radius: 6px;
+    padding: 6px 10px; font-size: 13px; font-weight: 500;
+    margin: 4px 0;
+  }
+  .dark .warn-badge { color: #fcd34d; }
+
+  /* ── SECTION PAGE HEADERS ── */
+  .page-header {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .page-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(22px, 5vw, 28px);
+    font-weight: 800; letter-spacing: 0.5px;
+    color: var(--primary);
+  }
+  .dark .page-header h2 { color: var(--primary-light); }
+  .page-header p { color: var(--text2); font-size: 14px; margin-top: 4px; }
+
+  /* ── NFPA CODES ── */
+  .code-item {
+    display: flex; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .code-item:last-child { border-bottom: none; }
+  .code-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── PRINT ── */
+  @media print {
+    .sidebar, .mobile-tabs, .app-header, .btn-icon, .no-print { display: none !important; }
+    .page { display: block !important; }
+    .main { padding: 0; }
+    .fan-card-body { display: block !important; }
+    .collapsible-body { display: block !important; }
+    body { background: #fff; color: #000; }
+    .print-header { display: block !important; }
+  }
+  .print-header {
+    display: none;
+    margin-bottom: 24px;
+    border-bottom: 3px solid #1a3a5c;
+    padding-bottom: 16px;
+  }
+
+  /* ── TOOLTIP ── */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-wrap .tip {
+    position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+    background: #0f2540; color: #fff;
+    padding: 6px 10px; border-radius: 6px; font-size: 12px;
+    white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.18s;
+    z-index: 999; max-width: 220px; white-space: normal; text-align: center;
+  }
+  .tooltip-wrap:hover .tip { opacity: 1; }
+  .tip-icon { cursor: help; color: var(--text3); font-size: 14px; }
+
+  /* ── MISC ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .flex-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center;
+    background: var(--primary); color: #fff;
+    border-radius: 20px; padding: 2px 10px;
+    font-size: 12px; font-weight: 700;
+  }
+  .badge-accent { background: var(--accent); color: #0f2540; }
+  .hidden { display: none !important; }
+  .sub-indent { margin-left: 0; padding: 14px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); margin-top: 10px; }
+
+  /* Fan card section divider */
+  .fan-divider {
+    height: 1px; background: var(--border);
+    margin: 16px -20px; 
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo-mark">FG</div>
+  <h1>Fan Guys &nbsp;<span>Site Survey</span></h1>
+  <div class="header-right">
+    <button class="btn-icon" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+    <button class="btn-icon no-print" onclick="printProposal()" title="Print / Export">🖨</button>
+  </div>
+</header>
+
+<div class="app-body">
+  <!-- Sidebar Nav (desktop) -->
+  <nav class="sidebar">
+    <div class="nav-item active" onclick="showPage('job')" data-page="job">
+      <span class="nav-icon">🏢</span> Job & Site Info
+    </div>
+    <div class="nav-item" onclick="showPage('fans')" data-page="fans">
+      <span class="nav-icon">🌀</span> Fan Layout & Specs
+    </div>
+    <div class="nav-item" onclick="showPage('code')" data-page="code">
+      <span class="nav-icon">📋</span> Code & Clearance
+    </div>
+    <div class="nav-item" onclick="showPage('summary')" data-page="summary">
+      <span class="nav-icon">📊</span> Live Summary
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ═══════════════════════════════════════════ PAGE 1: JOB INFO -->
+    <div class="page active" id="page-job">
+      <div class="page-header">
+        <h2>🏢 Job &amp; Site Information</h2>
+        <p>Enter project details, address, and site access requirements.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">📁 Project Details</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Project / Job Name *</label>
+            <input type="text" id="jobName" placeholder="e.g., ABC Warehouse – Phase 2" oninput="updateSummary()">
+          </div>
+          <div class="field">
+            <label>Salesman / Rep Name</label>
+            <input type="text" id="salesName" placeholder="Your name">
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📍 Installation Address</div>
+        <div class="form-grid">
+          <div class="field" style="grid-column: 1 / -1">
+            <label>Street Address</label>
+            <input type="text" id="addrStreet" placeholder="1234 Industrial Blvd, Suite 100" oninput="updateSummary()">
+          </div>
+          <div class="field">
+            <label>City</label>
+            <input type="text" id="addrCity" placeholder="City" oninput="updateSummary()">
+          </div>
+          <div class="field">
+            <label>State</label>
+            <input type="text" id="addrState" placeholder="TX" maxlength="2">
+          </div>
+          <div class="field">
+            <label>ZIP</label>
+            <input type="text" id="addrZip" placeholder="77000" maxlength="10">
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🕐 Site Access & Hours</div>
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>Building Operating Hours</label>
+            <input type="text" id="opHours" placeholder="e.g., Mon–Fri 7AM–5PM" oninput="updateSummary()">
+          </div>
+          <div class="field">
+            <label>After-Hours / Special Access?</label>
+            <div class="toggle-row" style="margin-top: 4px;">
+              <button class="toggle-btn" id="afterBtn" onclick="toggleAfterHours()">No</button>
+              <span id="afterLabel" style="font-size:13px;color:var(--text3)"></span>
+            </div>
+          </div>
+        </div>
+        <div id="afterHoursNote" class="hidden">
+          <div class="alert alert-warn" style="margin-top:12px">
+            <span class="alert-icon">⚠️</span>
+            <div><strong>After-Hours Access Required</strong> – Additional labor charges may apply. Confirm with customer and include in quote.</div>
+          </div>
+          <div class="field" style="margin-top:10px">
+            <label>Access Details / Contact</label>
+            <input type="text" id="afterDetails" placeholder="e.g., Call John at 555-0100 for after-hours badge access">
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Additional Site Notes</label>
+          <textarea id="siteNotes" placeholder="Dock doors, forklift availability, parking, staging area, etc."></textarea>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="showPage('fans')" style="margin-top:8px">
+        Next: Fan Layout & Specs →
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ PAGE 2: FANS -->
+    <div class="page" id="page-fans">
+      <div class="page-header">
+        <h2>🌀 Fan Layout &amp; Specs</h2>
+        <p>Add one card per fan. All fields are editable and removable.</p>
+      </div>
+      <div class="flex-row" style="margin-bottom:16px">
+        <button class="btn btn-accent" onclick="addFan()">+ Add Fan</button>
+        <span id="fanCount" class="badge badge-accent">0 Fans</span>
+      </div>
+      <div id="fanList"></div>
+      <div id="noFansMsg" class="alert alert-info">
+        <span class="alert-icon">💡</span>
+        <span>Click <strong>+ Add Fan</strong> above to begin adding fan locations.</span>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ PAGE 3: CODE -->
+    <div class="page" id="page-code">
+      <div class="page-header">
+        <h2>📋 Code &amp; Clearance Reference</h2>
+        <p>NFPA 13 / NFSA guidance for HVLS fan installations.</p>
+      </div>
+
+      <div class="alert alert-warn" style="margin-bottom:16px">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Important:</strong> Always verify final layout with local AHJ and fire protection engineer. These are general guidelines.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔴 NFPA 13 – Critical Requirements</div>
+        <div class="code-item">
+          <div class="code-icon">📏</div>
+          <div><strong>Maximum Fan Diameter:</strong> 24 ft (NFPA 13 limit for HVLS fans under standard sprinkler design)</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">🎯</div>
+          <div><strong>Sprinkler Centering:</strong> Fans shall be centered approximately between four adjacent sprinklers whenever possible</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">↕️</div>
+          <div><strong>Vertical Clearance:</strong> Minimum <strong>36 inches (3 ft)</strong> vertical clearance required from HVLS fan blade to sprinkler deflectors</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">🚒</div>
+          <div><strong>Fire Alarm Interlock:</strong> All HVLS fans <strong>must</strong> be interlocked to shut down immediately upon sprinkler waterflow alarm activation</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📐 General Sizing Rules of Thumb</div>
+        <div class="code-item">
+          <div class="code-icon">📊</div>
+          <div><strong>Fan Diameter vs. Ceiling Height:</strong> Maximum recommended fan diameter ≈ floor-to-blade clearance height. Example: 20 ft ceiling with 1 ft downtube = 19 ft max recommended diameter.</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">⬆️</div>
+          <div><strong>Minimum Floor-to-Blade:</strong> Absolute minimum 10 ft clearance from floor to lowest blade tip</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">↔️</div>
+          <div><strong>Lateral Clearances:</strong> Maintain adequate clearance from walls, columns, HVAC ducts, light fixtures, overhead doors, and other obstructions. Consult manufacturer specs for each model.</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">🔽</div>
+          <div><strong>Downtubes:</strong> Longer downtubes lower blades closer to floor – always verify 36" sprinkler clearance AND 10 ft floor clearance remain met.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⚡ Electrical & Controls Notes</div>
+        <div class="code-item">
+          <div class="code-icon">🔌</div>
+          <div><strong>Vivid Air Navigator (BACnet):</strong> Requires a dedicated 120V outlet at the controller location. If not present, conduit run must be quoted.</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">🔧</div>
+          <div><strong>Scope Types:</strong> <em>Turnkey</em> includes full power from panel. <em>Mechanical Only</em> = hang fan only. <em>Mechanical + Connections</em> = hang and wire motor, customer provides power to panel.</div>
+        </div>
+        <div class="code-item">
+          <div class="code-icon">📡</div>
+          <div><strong>Fire Alarm Wire:</strong> Fan Guys installers will run and terminate wire at VFD only. Customer is responsible for connection at Fire Alarm Panel (FAP).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ PAGE 4: SUMMARY -->
+    <div class="page" id="page-summary">
+      <div class="print-header" id="printHeader">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+          <div style="width:48px;height:48px;background:#e8a020;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:#0f2540">FG</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#1a3a5c">FAN GUYS – SITE SURVEY PROPOSAL</div>
+            <div style="font-size:13px;color:#666">This is a site survey and layout proposal only — final quote subject to field verification.</div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#444;margin-top:8px" id="printMeta"></div>
+      </div>
+
+      <div class="page-header">
+        <h2>📊 Live Summary &amp; Proposal</h2>
+        <p>Real-time overview — updates as you fill out fan details.</p>
+      </div>
+
+      <div class="flex-row no-print" style="margin-bottom:20px;gap:10px">
+        <button class="btn btn-primary" onclick="printProposal()">🖨 Export PDF / Print Proposal</button>
+        <button class="btn btn-outline" onclick="exportJSON()">⬇ Export JSON</button>
+      </div>
+
+      <!-- Aggregated Stats -->
+      <div class="card" id="summaryCard">
+        <div class="card-title">📈 Aggregated Totals</div>
+        <div id="summaryStats">
+          <div class="alert alert-info">
+            <span class="alert-icon">💡</span>
+            <span>Add fans in the Fan Layout tab to see aggregated totals here.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warnings -->
+      <div class="card" id="warningsCard">
+        <div class="card-title">⚠️ Automatic Warnings</div>
+        <div id="warningsList">
+          <div style="color:var(--text3);font-size:14px">No warnings yet.</div>
+        </div>
+      </div>
+
+      <!-- Per-fan breakdown -->
+      <div id="fanBreakdowns"></div>
+
+      <!-- Job info summary -->
+      <div class="card" id="jobSummaryCard">
+        <div class="card-title">🏢 Job Details</div>
+        <div id="jobSummaryContent" style="font-size:14px;color:var(--text2)">No job info entered yet.</div>
+      </div>
+
+      <div class="card no-print" style="border:1px dashed var(--border2)">
+        <div style="font-size:13px;color:var(--text3);text-align:center">
+          <em>"This is a site survey and layout proposal only — final quote subject to field verification."</em><br>
+          Fan Guys · <span id="currentDate"></span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Mobile Bottom Tabs -->
+<div class="mobile-tabs">
+  <div class="mobile-tabs-inner">
+    <div class="mob-tab active" onclick="showPage('job')" data-page="job">
+      <span class="ti">🏢</span><span>Job Info</span>
+    </div>
+    <div class="mob-tab" onclick="showPage('fans')" data-page="fans">
+      <span class="ti">🌀</span><span>Fans</span>
+    </div>
+    <div class="mob-tab" onclick="showPage('code')" data-page="code">
+      <span class="ti">📋</span><span>Codes</span>
+    </div>
+    <div class="mob-tab" onclick="showPage('summary')" data-page="summary">
+      <span class="ti">📊</span><span>Summary</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let fans = [];
+let fanCounter = 0;
+let darkMode = false;
+let afterHours = false;
+
+// VividAir / Go Fan Yourself product catalog
+// Each entry: { label, sizes: [{dia, label}], notes }
+const GFY_PRODUCTS = [
+  {
+    id: "z-tech",
+    label: "Z-Tech™ – Overhead Heavy-Duty (5-blade)",
+    desc: "Warehouses & large facilities. Highest air turnover per minute. Up to 32,400 sq ft coverage.",
+    sizes: [
+      { dia: 24, label: '24 ft' },
+      { dia: 22, label: '22 ft' },
+      { dia: 20, label: '20 ft' },
+      { dia: 18, label: '18 ft' },
+      { dia: 16, label: '16 ft' },
+      { dia: 14, label: '14 ft' },
+      { dia: 12, label: '12 ft' },
+      { dia: 10, label: '10 ft' },
+      { dia: 8,  label: '8 ft'  },
+    ]
+  },
+  {
+    id: "z-chill",
+    label: "Z-Chill™ – Overhead + HVAC Heavy-Duty (5-blade)",
+    desc: "Only fan with a diffuser system. Connects to HVAC. 40–80% additional savings over traditional HVAC.",
+    sizes: [
+      { dia: 24, label: '24 ft' },
+      { dia: 22, label: '22 ft' },
+      { dia: 20, label: '20 ft' },
+      { dia: 18, label: '18 ft' },
+      { dia: 16, label: '16 ft' },
+    ]
+  },
+  {
+    id: "z-tech3",
+    label: "Z-Tech3™ – Overhead Mid-Duty (3-blade)",
+    desc: "Quieter & quicker install than 5-blade. Up to 40,000 sq ft destratification coverage.",
+    sizes: [
+      { dia: 24, label: '24 ft' },
+      { dia: 20, label: '20 ft' },
+      { dia: 16, label: '16 ft' },
+      { dia: 12, label: '12 ft' },
+      { dia: 10, label: '10 ft' },
+      { dia: 8,  label: '8 ft'  },
+    ]
+  },
+  {
+    id: "conzumer",
+    label: "ConZumer™ – Overhead Light-Duty (3-blade)",
+    desc: "Best for 1–2 fans. No motor wiring – plugs into any 20-amp outlet. 6,400 sq ft coverage.",
+    sizes: [
+      { dia: 12, label: '12 ft' },
+    ]
+  },
+  {
+    id: "taz",
+    label: "Taz™ – In-Aisle Fan (4-blade)",
+    desc: "Best for obstructed ceilings. 135 ft linear cooling. Uses half the power of aisle/basket fans.",
+    sizes: [
+      { dia: 6,  label: '72 in (6 ft)' },
+      { dia: 3,  label: '36 in (3 ft)' },
+    ]
+  },
+  {
+    id: "ray-air",
+    label: "Ray-Air™ – UV-C Air Sanitation Unit",
+    desc: "UL-certified UVC air purifier. 150 sq ft per unit. 5.25 air changes/hr. Wall/ceiling mount or mobile.",
+    sizes: [
+      { dia: 0, label: 'N/A (not a fan – no diameter)' },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === id);
+  });
+  if (id === 'summary') updateSummary();
+}
+
+// ═══════════════════════════════════════════════════════════
+// DARK MODE
+// ═══════════════════════════════════════════════════════════
+function toggleDark() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('dark', darkMode);
+}
+
+// ═══════════════════════════════════════════════════════════
+// AFTER HOURS TOGGLE
+// ═══════════════════════════════════════════════════════════
+function toggleAfterHours() {
+  afterHours = !afterHours;
+  const btn = document.getElementById('afterBtn');
+  btn.textContent = afterHours ? 'Yes' : 'No';
+  btn.className = 'toggle-btn ' + (afterHours ? 'on' : 'off');
+  document.getElementById('afterHoursNote').classList.toggle('hidden', !afterHours);
+  updateSummary();
+}
+
+// ═══════════════════════════════════════════════════════════
+// FAN MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+function addFan() {
+  fanCounter++;
+  const id = fanCounter;
+  fans.push({ id });
+  document.getElementById('noFansMsg').classList.add('hidden');
+  renderFanCard(id);
+  updateFanCount();
+  updateSummary();
+  // scroll to new card
+  setTimeout(() => {
+    const el = document.getElementById('fan-card-' + id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+function removeFan(id) {
+  if (!confirm('Remove this fan?')) return;
+  fans = fans.filter(f => f.id !== id);
+  const el = document.getElementById('fan-card-' + id);
+  if (el) el.remove();
+  if (fans.length === 0) document.getElementById('noFansMsg').classList.remove('hidden');
+  updateFanCount();
+  updateSummary();
+}
+
+function updateFanCount() {
+  document.getElementById('fanCount').textContent = fans.length + (fans.length === 1 ? ' Fan' : ' Fans');
+}
+
+function toggleFanCard(id) {
+  const body = document.getElementById('fan-body-' + id);
+  const caret = document.getElementById('fan-caret-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  caret.textContent = isOpen ? '▼' : '▲';
+}
+
+function getFanLabel(id) {
+  const locEl = document.getElementById('fanLoc-' + id);
+  return locEl && locEl.value.trim() ? locEl.value.trim() : 'Fan #' + id;
+}
+
+function updateFanHeader(id) {
+  const lbl = document.getElementById('fan-label-' + id);
+  if (lbl) lbl.textContent = getFanLabel(id);
+  checkFanWarnings(id);
+  updateSummary();
+}
+
+function renderFanCard(id) {
+  const productOptions = GFY_PRODUCTS.map(p => `<option value="${p.id}">${p.label}</option>`).join('');
+  const html = `
+  <div class="fan-card" id="fan-card-${id}">
+    <div class="fan-card-header" onclick="toggleFanCard(${id})">
+      <div class="fan-num">${id}</div>
+      <div class="fan-label" id="fan-label-${id}">Fan #${id}</div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <span style="font-size:11px;opacity:0.7" id="fan-warn-badge-${id}"></span>
+        <span id="fan-caret-${id}" style="font-size:12px">▲</span>
+      </div>
+    </div>
+    <div class="fan-card-body open" id="fan-body-${id}">
+
+      <!-- Location & Ceiling -->
+      <div class="form-grid cols-2">
+        <div class="field">
+          <label>Fan Identifier / Location *
+            <span class="tooltip-wrap"><span class="tip-icon">ℹ️</span><span class="tip">e.g., "North Bay – Fan 1", "Above Loading Dock", "Southwest Corner"</span></span>
+          </label>
+          <input type="text" id="fanLoc-${id}" placeholder='e.g., "North Bay – Fan 1"' oninput="updateFanHeader(${id})">
+        </div>
+        <div class="field">
+          <label>Ceiling Height at this Location (ft) *
+            <span class="tooltip-wrap"><span class="tip-icon">ℹ️</span><span class="tip">Measure from finished floor to the underside of the structure at the fan's mounting point.</span></span>
+          </label>
+          <input type="number" id="fanCH-${id}" min="10" max="100" placeholder="e.g., 28" oninput="checkFanWarnings(${id});updateSummary()">
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:10px">
+        <label>Special Circumstances / Obstructions at this Location</label>
+        <textarea id="fanObs-${id}" placeholder="Sprinklers, HVAC ducts, lighting, beams, columns, skylights…"></textarea>
+      </div>
+
+      <div class="fan-section-label">⚙️ Fan Model & Dimensions</div>
+
+      <div class="field">
+        <label>Go Fan Yourself / VividAir Product *</label>
+        <select id="fanModelSel-${id}" onchange="applyGFYProduct(${id})">
+          <option value="">— Select Product —</option>
+          ${productOptions}
+        </select>
+      </div>
+      <div id="fanModelDesc-${id}" class="alert alert-info hidden" style="margin-top:8px">
+        <span class="alert-icon">💡</span><span id="fanModelDescText-${id}"></span>
+      </div>
+
+      <div class="form-grid cols-2" style="margin-top:10px">
+        <div class="field">
+          <label>Fan Diameter *
+            <span class="tooltip-wrap"><span class="tip-icon">ℹ️</span><span class="tip">Sizes auto-load from selected product. Max 24 ft per NFPA 13.</span></span>
+          </label>
+          <select id="fanDia-${id}" onchange="checkFanWarnings(${id});updateSummary()">
+            <option value="">— Select product first —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Downtube Length (ft)
+            <span class="tooltip-wrap"><span class="tip-icon">ℹ️</span><span class="tip">Default is 1 ft. Increase for higher ceilings or to meet sprinkler clearance. Check 36" clearance to sprinklers.</span></span>
+          </label>
+          <input type="number" id="fanDT-${id}" min="1" max="30" value="1" placeholder="1" oninput="checkFanWarnings(${id});updateSummary()">
+        </div>
+      </div>
+      <div id="fanWarnings-${id}"></div>
+
+      <div class="field" style="margin-top:10px">
+        <label>Mounting Type *</label>
+        <select id="fanMount-${id}" oninput="updateSummary()">
+          <option value="">— Select Mounting Type —</option>
+          <option value="Z-Purlin">Z-Purlin</option>
+          <option value="Truss">Truss</option>
+          <option value="I-Beam Steel">I-Beam Steel</option>
+          <option value="I-Beam Wood">I-Beam Wood</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="fan-section-label">🎛️ Control Method</div>
+
+      <div class="field">
+        <label>Control Method *</label>
+        <div class="radio-group" id="fanCtrlGroup-${id}">
+          ${makeRadio('fanCtrl', id, 'vfd', 'Directly from VFD', `onCtrlChange(${id})`)}
+          ${makeRadio('fanCtrl', id, 'keypad', 'Wired Keypad', `onCtrlChange(${id})`)}
+          ${makeRadio('fanCtrl', id, 'navigator', 'Vivid Air Navigator (BACnet)', `onCtrlChange(${id})`)}
+        </div>
+      </div>
+
+      <div id="fanNavSub-${id}" class="sub-indent hidden">
+        <div class="alert alert-info" style="margin-bottom:10px">
+          <span class="alert-icon">📡</span>
+          <span>Navigator (BACnet) requires a 120V outlet at the controller.</span>
+        </div>
+        <div class="field">
+          <label>120V Outlet Present at Controller Location?</label>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="navOutletBtn-${id}" onclick="toggleNavOutlet(${id})">No</button>
+            <span id="navOutletLabel-${id}" style="font-size:13px;color:var(--text3)"></span>
+          </div>
+        </div>
+        <div id="navConduitField-${id}" class="field" style="margin-top:10px">
+          <label>Distance to Run New 120V Conduit / Outlet (ft)</label>
+          <input type="number" id="navConduit-${id}" min="0" placeholder="Feet of conduit needed" oninput="updateSummary()">
+        </div>
+      </div>
+
+      <div class="fan-section-label">🚒 Fire Alarm Interlock</div>
+
+      <div class="field">
+        <label>Fire Alarm Wire Responsibility *</label>
+        <div class="radio-group" id="fanFAGroup-${id}">
+          ${makeRadio('fanFA', id, 'installer', 'Installers Running Fire Alarm Wires', `onFAChange(${id})`)}
+          ${makeRadio('fanFA', id, 'customer', 'Customer Responsible', `onFAChange(${id})`)}
+        </div>
+      </div>
+
+      <div id="fanFASub-${id}" class="sub-indent hidden">
+        <div class="alert alert-warn" style="margin-bottom:10px">
+          <span class="alert-icon">⚠️</span>
+          <span>Installers will run wire and terminate at VFD only. <strong>Customer to connect at FAP.</strong></span>
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>FAP Location / Landing Point</label>
+            <input type="text" id="fanFAP-${id}" placeholder="e.g., East wall, electrical room">
+          </div>
+          <div class="field">
+            <label>Approx. Distance to Run FA Wire (ft)</label>
+            <input type="number" id="fanFADist-${id}" min="0" placeholder="Feet" oninput="updateSummary()">
+          </div>
+        </div>
+      </div>
+
+      <div class="fan-section-label">⚡ Electrical Scope</div>
+
+      <div class="field">
+        <label>Scope Type *</label>
+        <div class="radio-group" id="fanScopeGroup-${id}">
+          ${makeRadio('fanScope', id, 'turnkey', 'Turnkey (Full Power)', `onScopeChange(${id})`)}
+          ${makeRadio('fanScope', id, 'mechonly', 'Mechanical (Hang Only)', `onScopeChange(${id})`)}
+          ${makeRadio('fanScope', id, 'mechconn', 'Mechanical + Connections', `onScopeChange(${id})`)}
+        </div>
+      </div>
+
+      <div id="fanTurnkeySub-${id}" class="sub-indent hidden">
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>Distance: Electrical Panel → Controller (ft)</label>
+            <input type="number" id="fanPC-${id}" min="0" placeholder="Feet" oninput="updateSummary()">
+          </div>
+          <div class="field">
+            <label>Distance: Controller → Motor (ft)</label>
+            <input type="number" id="fanCM-${id}" min="0" placeholder="Feet" oninput="updateSummary()">
+          </div>
+          <div class="field">
+            <label>Voltage Supply</label>
+            <select id="fanVolt-${id}" oninput="updateSummary()">
+              <option value="">— Select Voltage —</option>
+              <option value="480V 3ph" selected>480V 3-Phase (Preferred)</option>
+              <option value="208V 3ph">208V 3-Phase</option>
+              <option value="240V 1ph">240V Single Phase</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Breaker Size &amp; Manufacturer</label>
+            <input type="text" id="fanBreaker-${id}" placeholder='e.g., "30A – Square D"'>
+          </div>
+        </div>
+      </div>
+
+      <div class="fan-section-label">📝 Notes for this Fan</div>
+      <div class="field">
+        <textarea id="fanNotes-${id}" placeholder="Any additional notes, customer requests, or special conditions for this fan…" oninput="updateSummary()"></textarea>
+      </div>
+
+      <div style="margin-top:14px;display:flex;justify-content:flex-end">
+        <button class="btn btn-danger btn-sm" onclick="removeFan(${id})">🗑 Remove Fan ${id}</button>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('fanList').insertAdjacentHTML('beforeend', html);
+  // init radio groups
+  initRadioGroup('fanCtrl', id);
+  initRadioGroup('fanFA', id);
+  initRadioGroup('fanScope', id);
+  // init nav outlet state
+  window['navOutlet_' + id] = false;
+}
+
+function makeRadio(name, id, val, label, onchange) {
+  return `<label class="radio-option" id="${name}-opt-${id}-${val}">
+    <input type="radio" name="${name}-${id}" value="${val}" onchange="${onchange}">
+    ${label}
+  </label>`;
+}
+
+function initRadioGroup(name, id) {
+  const inputs = document.querySelectorAll(`input[name="${name}-${id}"]`);
+  inputs.forEach(inp => {
+    inp.addEventListener('change', () => {
+      inputs.forEach(i => {
+        i.closest('.radio-option').classList.toggle('selected', i.checked);
+      });
+    });
+  });
+}
+
+function getRadioVal(name, id) {
+  const inp = document.querySelector(`input[name="${name}-${id}"]:checked`);
+  return inp ? inp.value : '';
+}
+
+function onCtrlChange(id) {
+  const val = getRadioVal('fanCtrl', id);
+  document.getElementById('fanNavSub-' + id).classList.toggle('hidden', val !== 'navigator');
+  updateSummary();
+}
+
+function onFAChange(id) {
+  const val = getRadioVal('fanFA', id);
+  document.getElementById('fanFASub-' + id).classList.toggle('hidden', val !== 'installer');
+  updateSummary();
+}
+
+function onScopeChange(id) {
+  const val = getRadioVal('fanScope', id);
+  document.getElementById('fanTurnkeySub-' + id).classList.toggle('hidden', val !== 'turnkey');
+  updateSummary();
+}
+
+function toggleNavOutlet(id) {
+  window['navOutlet_' + id] = !window['navOutlet_' + id];
+  const isPresent = window['navOutlet_' + id];
+  const btn = document.getElementById('navOutletBtn-' + id);
+  btn.textContent = isPresent ? 'Yes' : 'No';
+  btn.className = 'toggle-btn ' + (isPresent ? 'on' : 'off');
+  document.getElementById('navConduitField-' + id).classList.toggle('hidden', isPresent);
+  updateSummary();
+}
+
+function applyGFYProduct(id) {
+  const sel = document.getElementById('fanModelSel-' + id);
+  const diaSelect = document.getElementById('fanDia-' + id);
+  const descBox = document.getElementById('fanModelDesc-' + id);
+  const descText = document.getElementById('fanModelDescText-' + id);
+  const pid = sel.value;
+  const product = GFY_PRODUCTS.find(p => p.id === pid);
+
+  if (!product) {
+    diaSelect.innerHTML = '<option value="">— Select product first —</option>';
+    descBox.classList.add('hidden');
+    return;
+  }
+
+  // Populate diameter options
+  diaSelect.innerHTML = '<option value="">— Select Size —</option>' +
+    product.sizes.map(s => `<option value="${s.dia}">${s.label}</option>`).join('');
+
+  // Auto-select if only one size
+  if (product.sizes.length === 1) {
+    diaSelect.value = product.sizes[0].dia;
+  }
+
+  // Show description
+  descText.textContent = product.desc;
+  descBox.classList.remove('hidden');
+
+  checkFanWarnings(id);
+  updateSummary();
+}
+
+// ═══════════════════════════════════════════════════════════
+// WARNINGS PER FAN
+// ═══════════════════════════════════════════════════════════
+function checkFanWarnings(id) {
+  const ch = parseFloat(document.getElementById('fanCH-' + id)?.value) || 0;
+  const dia = parseFloat(document.getElementById('fanDia-' + id)?.value) || 0;
+  const dt = parseFloat(document.getElementById('fanDT-' + id)?.value) || 1;
+  const container = document.getElementById('fanWarnings-' + id);
+  const card = document.getElementById('fan-card-' + id);
+  if (!container) return;
+
+  let warns = [];
+  let errors = [];
+
+  const bladeH = ch - dt;
+  const floorClear = bladeH; // approx
+
+  if (ch > 0 && bladeH < 10) {
+    errors.push('Floor-to-blade clearance is less than 10 ft minimum (' + bladeH.toFixed(1) + ' ft estimated). Adjust downtube or verify ceiling height.');
+  }
+  if (dia > 24) {
+    errors.push('Fan diameter exceeds 24 ft NFPA 13 maximum.');
+  }
+  if (dia > 0 && ch > 0 && dia > bladeH) {
+    warns.push('Fan diameter (' + dia + ' ft) exceeds floor-to-blade clearance (' + bladeH.toFixed(1) + ' ft). Consider a smaller fan or longer downtube.');
+  }
+  if (dia > 0 && ch > 0 && dia > (bladeH * 0.85)) {
+    if (!warns.some(w => w.includes('exceeds'))) {
+      warns.push('Fan diameter is approaching the floor-to-blade limit. Verify sprinkler layout and clearances.');
+    }
+  }
+  if (dt > 4) {
+    warns.push('Long downtube (' + dt + ' ft) – verify 36" clearance to sprinkler deflectors and 10 ft floor clearance.');
+  }
+  if (ch > 0 && ch < 14) {
+    warns.push('Low ceiling height (' + ch + ' ft). Ensure at least 10 ft floor-to-blade clearance.');
+  }
+
+  let html = '';
+  errors.forEach(e => { html += `<div class="alert alert-danger" style="margin-top:8px"><span class="alert-icon">🚫</span><div>${e}</div></div>`; });
+  warns.forEach(w => { html += `<div class="alert alert-warn" style="margin-top:8px"><span class="alert-icon">⚠️</span><div>${w}</div></div>`; });
+
+  container.innerHTML = html;
+
+  const badge = document.getElementById('fan-warn-badge-' + id);
+  if (badge) {
+    if (errors.length) { badge.textContent = '🚫'; card.className = 'fan-card has-error'; }
+    else if (warns.length) { badge.textContent = '⚠️'; card.className = 'fan-card has-warning'; }
+    else { badge.textContent = ''; card.className = 'fan-card'; }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LIVE SUMMARY
+// ═══════════════════════════════════════════════════════════
+function updateSummary() {
+  updateJobSummary();
+  if (fans.length === 0) {
+    document.getElementById('summaryStats').innerHTML = `<div class="alert alert-info"><span class="alert-icon">💡</span><span>Add fans in the Fan Layout tab to see aggregated totals here.</span></div>`;
+    document.getElementById('warningsList').innerHTML = `<div style="color:var(--text3);font-size:14px">No warnings yet.</div>`;
+    document.getElementById('fanBreakdowns').innerHTML = '';
+    return;
+  }
+
+  // Collect data
+  let totalDT = 0, totalPCdist = 0, totalCMdist = 0;
+  let mounts = {}, navCount = 0, navConduitTotal = 0, faCount = 0, faDistTotal = 0;
+  let warnings = [];
+  let breakdownHTML = '';
+
+  if (afterHours) warnings.push({ type: 'warn', msg: 'After-hours access required – verify additional labor costs.' });
+
+  fans.forEach(f => {
+    const id = f.id;
+    const loc = val('fanLoc-' + id) || 'Fan #' + id;
+    const ch = parseFloat(val('fanCH-' + id)) || 0;
+    const dia = parseFloat(val('fanDia-' + id)) || 0;
+    const dt = parseFloat(val('fanDT-' + id)) || 1;
+    const mount = val('fanMount-' + id);
+    const ctrl = getRadioVal('fanCtrl', id);
+    const fa = getRadioVal('fanFA', id);
+    const scope = getRadioVal('fanScope', id);
+    const pc = parseFloat(val('fanPC-' + id)) || 0;
+    const cm = parseFloat(val('fanCM-' + id)) || 0;
+    const navOutletPresent = window['navOutlet_' + id];
+    const navConduit = parseFloat(val('navConduit-' + id)) || 0;
+    const faDistFt = parseFloat(val('fanFADist-' + id)) || 0;
+
+    totalDT += dt;
+    if (mount) mounts[mount] = (mounts[mount] || 0) + 1;
+    if (scope === 'turnkey') { totalPCdist += pc; totalCMdist += cm; }
+    if (ctrl === 'navigator') {
+      navCount++;
+      if (!navOutletPresent) navConduitTotal += navConduit;
+    }
+    if (fa === 'installer') { faCount++; faDistTotal += faDistFt; }
+
+    // Warnings
+    const bladeH = ch - dt;
+    if (ch > 0 && bladeH < 10) warnings.push({ type: 'error', msg: `${loc}: Floor-to-blade clearance below 10 ft minimum.` });
+    if (dia > 24) warnings.push({ type: 'error', msg: `${loc}: Diameter exceeds 24 ft NFPA limit.` });
+    if (dia > 0 && ch > 0 && dia > bladeH) warnings.push({ type: 'warn', msg: `${loc}: Diameter (${dia} ft) exceeds floor-to-blade clearance. Review sizing.` });
+    if (ctrl === 'navigator' && !navOutletPresent) warnings.push({ type: 'warn', msg: `${loc}: Navigator selected – 120V outlet not present. Conduit run required.` });
+    if (fa === 'installer') warnings.push({ type: 'info', msg: `${loc}: Installers running fire alarm wire to VFD. Customer connects at FAP.` });
+    if (!mount) warnings.push({ type: 'warn', msg: `${loc}: Mounting type not selected.` });
+    warnings.push({ type: 'info', msg: `${loc}: Verify sprinkler layout – fan centered between 4 sprinklers, 36" clearance to deflectors.` });
+
+    // Per-fan breakdown
+    const pid = val('fanModelSel-' + id);
+    const product = GFY_PRODUCTS.find(p => p.id === pid);
+    const model = product ? product.label : '—';
+    const diaEl = document.getElementById('fanDia-' + id);
+    const diaLabel = diaEl && diaEl.selectedIndex > 0 ? diaEl.options[diaEl.selectedIndex].text : (dia ? dia + ' ft' : '—');
+    breakdownHTML += `
+    <div style="margin-bottom:12px">
+      <div class="collapsible-header" onclick="toggleCollapsible('fbd-${id}')">
+        <div class="ch-title">🌀 Fan #${id} – ${esc(loc)}</div>
+        <span class="caret" id="fbd-caret-${id}">▼</span>
+      </div>
+      <div class="collapsible-body" id="fbd-${id}">
+        <div class="summary-stat"><span class="stat-label">Model</span><span class="stat-val" style="font-size:13px;text-align:right;max-width:65%;font-family:'Barlow',sans-serif;font-weight:600">${esc(model)}</span></div>
+        <div class="summary-stat"><span class="stat-label">Diameter</span><span class="stat-val">${diaLabel}</span></div>
+        <div class="summary-stat"><span class="stat-label">Ceiling Height</span><span class="stat-val">${ch ? ch + ' ft' : '—'}</span></div>
+        <div class="summary-stat"><span class="stat-label">Downtube</span><span class="stat-val">${dt} ft</span></div>
+        <div class="summary-stat"><span class="stat-label">Mounting</span><span class="stat-val">${mount || '—'}</span></div>
+        <div class="summary-stat"><span class="stat-label">Control</span><span class="stat-val">${ctrlLabel(ctrl)}</span></div>
+        <div class="summary-stat"><span class="stat-label">Fire Alarm</span><span class="stat-val">${faLabel(fa)}</span></div>
+        <div class="summary-stat"><span class="stat-label">Scope</span><span class="stat-val">${scopeLabel(scope)}</span></div>
+        ${scope === 'turnkey' ? `<div class="summary-stat"><span class="stat-label">Panel → Controller</span><span class="stat-val">${pc} ft</span></div><div class="summary-stat"><span class="stat-label">Controller → Motor</span><span class="stat-val">${cm} ft</span></div>` : ''}
+        ${val('fanNotes-' + id) ? `<div class="summary-stat"><span class="stat-label">Notes</span><span class="stat-val" style="text-align:right;font-size:13px;font-family:'Barlow',sans-serif;font-weight:500;max-width:60%">${esc(val('fanNotes-' + id))}</span></div>` : ''}
+      </div>
+    </div>`;
+  });
+
+  // Render aggregated stats
+  const mountSummary = Object.entries(mounts).map(([k, v]) => `${v}× ${k}`).join(', ') || '—';
+  const statsHTML = `
+    <div class="summary-stat"><span class="stat-label">Total Fans</span><span class="stat-val">${fans.length}</span></div>
+    <div class="summary-stat"><span class="stat-label">Mounting Types</span><span class="stat-val" style="font-size:14px">${mountSummary}</span></div>
+    <div class="summary-stat"><span class="stat-label">Total Downtube Length</span><span class="stat-val">${totalDT} ft</span></div>
+    <div class="summary-stat"><span class="stat-label">Total Conduit Run (Turnkey)</span><span class="stat-val">${totalPCdist + totalCMdist} ft</span></div>
+    <div class="summary-stat"><span class="stat-label">Navigator Units</span><span class="stat-val">${navCount}</span></div>
+    <div class="summary-stat"><span class="stat-label">Navigator 120V Conduit Needed</span><span class="stat-val">${navConduitTotal} ft</span></div>
+    <div class="summary-stat"><span class="stat-label">Fans w/ FA Wire (Installers)</span><span class="stat-val">${faCount}</span></div>
+    <div class="summary-stat"><span class="stat-label">Total FA Wire Run</span><span class="stat-val">${faDistTotal} ft</span></div>
+  `;
+  document.getElementById('summaryStats').innerHTML = statsHTML;
+
+  // Warnings
+  const warnHTML = warnings.length ? warnings.map(w => {
+    const cls = w.type === 'error' ? 'alert-danger' : w.type === 'warn' ? 'alert-warn' : 'alert-info';
+    const ico = w.type === 'error' ? '🚫' : w.type === 'warn' ? '⚠️' : '💡';
+    return `<div class="alert ${cls}" style="margin-bottom:6px"><span class="alert-icon">${ico}</span><div>${esc(w.msg)}</div></div>`;
+  }).join('') : '<div style="color:var(--text3);font-size:14px">✅ No warnings.</div>';
+  document.getElementById('warningsList').innerHTML = warnHTML;
+
+  // Breakdowns
+  document.getElementById('fanBreakdowns').innerHTML = `<div class="card"><div class="card-title">🌀 Per-Fan Breakdown</div>${breakdownHTML}</div>`;
+}
+
+function updateJobSummary() {
+  const name = val('jobName') || '—';
+  const street = val('addrStreet') || '';
+  const city = val('addrCity') || '';
+  const state = val('addrState') || '';
+  const zip = val('addrZip') || '';
+  const addr = [street, city, state, zip].filter(Boolean).join(', ') || '—';
+  const hours = val('opHours') || '—';
+  const sales = val('salesName') || '—';
+  document.getElementById('jobSummaryContent').innerHTML = `
+    <div class="summary-stat"><span class="stat-label">Project</span><span class="stat-val">${esc(name)}</span></div>
+    <div class="summary-stat"><span class="stat-label">Address</span><span class="stat-val" style="font-size:14px">${esc(addr)}</span></div>
+    <div class="summary-stat"><span class="stat-label">Operating Hours</span><span class="stat-val" style="font-size:14px">${esc(hours)}</span></div>
+    <div class="summary-stat"><span class="stat-label">After-Hours Required</span><span class="stat-val">${afterHours ? '⚠️ Yes' : 'No'}</span></div>
+    <div class="summary-stat"><span class="stat-label">Sales Rep</span><span class="stat-val" style="font-size:14px">${esc(sales)}</span></div>
+  `;
+  // Update print meta
+  const d = new Date();
+  document.getElementById('printMeta').innerHTML = `Job: <strong>${esc(name)}</strong> &nbsp;|&nbsp; Address: <strong>${esc(addr)}</strong> &nbsp;|&nbsp; Rep: <strong>${esc(sales)}</strong> &nbsp;|&nbsp; Date: <strong>${d.toLocaleDateString()}</strong>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// COLLAPSIBLE
+// ═══════════════════════════════════════════════════════════
+function toggleCollapsible(id) {
+  const body = document.getElementById(id);
+  const caret = document.getElementById(id + '-caret');
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (caret) caret.classList.toggle('open', !isOpen);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PRINT / EXPORT
+// ═══════════════════════════════════════════════════════════
+function printProposal() {
+  updateSummary();
+  showPage('summary');
+  setTimeout(() => window.print(), 200);
+}
+
+function exportJSON() {
+  updateSummary();
+  const data = {
+    exported: new Date().toISOString(),
+    job: {
+      name: val('jobName'), salesName: val('salesName'),
+      address: `${val('addrStreet')}, ${val('addrCity')}, ${val('addrState')} ${val('addrZip')}`,
+      opHours: val('opHours'), afterHours, siteNotes: val('siteNotes')
+    },
+    fans: fans.map(f => {
+      const id = f.id;
+      const pid2 = val('fanModelSel-' + id);
+      const prod2 = GFY_PRODUCTS.find(p => p.id === pid2);
+      const dEl = document.getElementById('fanDia-' + id);
+      const diaLabel2 = dEl && dEl.selectedIndex > 0 ? dEl.options[dEl.selectedIndex].text : val('fanDia-' + id);
+      return {
+        id, location: val('fanLoc-' + id),
+        ceilingHeight: val('fanCH-' + id),
+        product: prod2 ? prod2.label : (pid2 || '—'),
+        diameter: diaLabel2,
+        downtube: val('fanDT-' + id),
+        control: getRadioVal('fanCtrl', id),
+        navOutletPresent: window['navOutlet_' + id],
+        navConduit: val('navConduit-' + id),
+        fireAlarm: getRadioVal('fanFA', id),
+        fapLocation: val('fanFAP-' + id), faDistance: val('fanFADist-' + id),
+        scope: getRadioVal('fanScope', id),
+        panelToController: val('fanPC-' + id), controllerToMotor: val('fanCM-' + id),
+        voltage: val('fanVolt-' + id), breaker: val('fanBreaker-' + id),
+        obstructions: val('fanObs-' + id), notes: val('fanNotes-' + id)
+      };
+    })
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fan-guys-survey-' + Date.now() + '.json';
+  a.click();
+}
+
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function ctrlLabel(v) {
+  return { vfd: 'Directly from VFD', keypad: 'Wired Keypad', navigator: 'Vivid Air Navigator (BACnet)' }[v] || '—';
+}
+function faLabel(v) {
+  return { installer: 'Installers run wire', customer: 'Customer responsible' }[v] || '—';
+}
+function scopeLabel(v) {
+  return { turnkey: 'Turnkey (Full Power)', mechonly: 'Mechanical (Hang Only)', mechconn: 'Mechanical + Connections' }[v] || '—';
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
