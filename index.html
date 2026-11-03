@@ -592,6 +592,7 @@
   <div class="logo-mark">FG</div>
   <h1>Fan Guys &nbsp;<span>Site Survey</span></h1>
   <div class="header-right">
+    <button class="btn-icon no-print" onclick="startNewSurvey()" title="Start a new survey">＋</button>
     <button class="btn-icon" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
     <button class="btn-icon no-print" onclick="printProposal()" title="Print / Export">🖨</button>
   </div>
@@ -2767,6 +2768,8 @@ function getEquipQty(key) {
 }
 
 function togglePanelRoom() {
+  const btn = document.getElementById('panelRoomBtn');
+  if (!btn) return;
   if (panelRoomStatus === 'unchecked') { panelRoomStatus = 'yes'; btn.textContent = 'Yes – Room Available'; btn.className = 'toggle-btn on btn-sm'; }
   else if (panelRoomStatus === 'yes') { panelRoomStatus = 'no'; btn.textContent = 'No – Panel Full'; btn.className = 'toggle-btn off btn-sm'; }
   else { panelRoomStatus = 'unchecked'; btn.textContent = 'Not Checked'; btn.className = 'toggle-btn btn-sm'; }
@@ -2890,6 +2893,91 @@ document.addEventListener('DOMContentLoaded', function() {
   try { updateAerialSummary(); } catch(e) { console.warn('aerial init', e); }
   try { updatePhotoProgress(); } catch(e) { console.warn('photo init', e); }
 });
+</script>
+<script>
+// ── Auto-save: keeps the survey on this phone so a reload or closed tab never wipes it ──
+(function() {
+  var KEY = 'fg_sitesurvey_autosave_v1';
+  var restoring = false, timer = null;
+  function fields() { return Array.prototype.slice.call(document.querySelectorAll('input, select, textarea')); }
+  function snapshot() {
+    var vals = {}, radios = {}, noId = [];
+    fields().forEach(function(el) {
+      if (el.type === 'file' || el.type === 'button' || el.type === 'submit') return;
+      if (el.type === 'radio') { if (el.checked && el.name) radios[el.name] = el.value; return; }
+      var v = (el.type === 'checkbox') ? el.checked : el.value;
+      if (el.id) vals[el.id] = v; else noId.push(v);
+    });
+    var nav = {};
+    fans.forEach(function(f) { nav[f.id] = !!window['navOutlet_' + f.id]; });
+    var equip = Array.prototype.slice.call(document.querySelectorAll('.equip-chip.active')).map(function(b) { return b.id; });
+    return { v: 1, fanIds: fans.map(function(f) { return f.id; }), fanCounter: fanCounter, afterHours: afterHours,
+             nav: nav, equip: equip, equipQtys: equipQtys, panelRoomStatus: panelRoomStatus,
+             savedFanNames: savedFanNames, vals: vals, radios: radios, noId: noId };
+  }
+  function writeNow() { if (restoring) return; try { localStorage.setItem(KEY, JSON.stringify(snapshot())); } catch (e) {} }
+  function save() { if (restoring) return; clearTimeout(timer); timer = setTimeout(writeNow, 400); }
+  function applyFields(d, fire) {
+    var i = 0;
+    fields().forEach(function(el) {
+      if (el.type === 'file' || el.type === 'button' || el.type === 'submit') return;
+      if (el.type === 'radio') {
+        if (el.name && d.radios[el.name] === el.value && !el.checked) {
+          el.checked = true; if (fire) el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        return;
+      }
+      var has = el.id ? (el.id in d.vals) : (i < d.noId.length);
+      var v = el.id ? d.vals[el.id] : d.noId[i];
+      if (!el.id) i++;
+      if (!has) return;
+      if (el.type === 'checkbox') { if (el.checked !== !!v) { el.checked = !!v; if (fire) el.dispatchEvent(new Event('change', { bubbles: true })); } }
+      else if (el.value !== v) {
+        el.value = v;
+        if (fire) { el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }
+      }
+    });
+  }
+  function restore() {
+    var d; try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) { return; }
+    if (!d || !d.vals) return;
+    restoring = true;
+    try {
+      (d.fanIds || []).forEach(function(id) { fanCounter = id - 1; addFan(); });
+      fanCounter = d.fanCounter || fanCounter;
+      // Pass 1 sets values and fires the app's own handlers (fills dependent dropdowns);
+      // pass 2 sets them again so dependent fields keep their saved choice.
+      applyFields(d, true); applyFields(d, false);
+      if (!!d.afterHours !== afterHours) toggleAfterHours();
+      Object.keys(d.nav || {}).forEach(function(id) { if (!!d.nav[id] !== !!window['navOutlet_' + id]) toggleNavOutlet(+id); });
+      Array.prototype.slice.call(document.querySelectorAll('.equip-chip')).forEach(function(b) {
+        if ((d.equip || []).indexOf(b.id) >= 0 !== b.classList.contains('active')) toggleEquip(b.id);
+      });
+      Object.keys(d.equipQtys || {}).forEach(function(k) {
+        equipQtys[k] = d.equipQtys[k];
+        var el = document.getElementById('qty-' + k); if (el) el.textContent = equipQtys[k];
+      });
+      for (var n = 0; n < 3 && panelRoomStatus !== (d.panelRoomStatus || 'unchecked'); n++) togglePanelRoom();
+      Object.assign(savedFanNames, d.savedFanNames || {});
+      try { updateSummary(); updateAerialSummary(); updatePhotoProgress(); } catch (e) {}
+    } finally { restoring = false; }
+    setTimeout(function() { window.scrollTo(0, 0); }, 120);
+  }
+  window.startNewSurvey = function() {
+    if (!confirm('Start a new survey? This clears everything on this phone.')) return;
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    restoring = true;
+    location.reload();
+  };
+  document.addEventListener('DOMContentLoaded', function() {
+    try { restore(); } catch (e) { restoring = false; console.warn('autosave restore failed', e); }
+    document.addEventListener('input', save, true);
+    document.addEventListener('change', save, true);
+    document.addEventListener('click', save, true);
+    window.addEventListener('pagehide', writeNow);
+    document.addEventListener('visibilitychange', function() { if (document.hidden) writeNow(); });
+  });
+})();
 </script>
 </body>
 </html>
